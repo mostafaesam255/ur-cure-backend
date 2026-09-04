@@ -1,0 +1,19 @@
+{
+  "name": "ur_cure_backend",
+  "version": "1.0.0",
+  "description": "Ur Cure Pharmacy Real Backend API (Express + SQLite)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "extract": "python scripts/extract_images.py",
+    "import": "python scripts/import_csv.py"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "multer": "^2.2.0",
+    "sqlite3": "^5.1.7"
+  }
+}
