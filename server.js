@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const cors = require('cors');
 const config = require('./src/config/appConfig');
 const requestLogger = require('./src/middlewares/logger');
@@ -16,6 +16,21 @@ app.use('/images', express.static(config.IMAGES_DIR));
 
 // API Routes
 app.use('/api', routes);
+
+// Static route for Flutter Web App
+const path = require('path');
+const fs = require('fs');
+const localPublicDir = path.resolve(__dirname, 'public');
+const localFlutterWebDir = path.resolve(__dirname, '..', 'ur_cure_flutter', 'build', 'web');
+const WEB_DIR = fs.existsSync(localPublicDir) ? localPublicDir : (fs.existsSync(localFlutterWebDir) ? localFlutterWebDir : null);
+
+if (WEB_DIR) {
+  app.use(express.static(WEB_DIR));
+  app.get('*', (req, res, next) => {
+    if (req.url.startsWith('/api') || req.url.startsWith('/images')) return next();
+    res.sendFile(path.join(WEB_DIR, 'index.html'));
+  });
+}
 
 // Global 404 Handler for API
 app.use('/api/*', (req, res) => {
