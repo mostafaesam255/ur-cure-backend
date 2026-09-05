@@ -5,7 +5,9 @@ function resolveImageUrl(req, row) {
   if (row.has_local_image && row.local_image_path) {
     const protocol = req.protocol;
     const host = req.get('host') || `localhost:${config.PORT}`;
-    return `${protocol}://${host}${row.local_image_path}`;
+    const cleanPath = row.local_image_path.replace(/\\/g, '/');
+    const normalizedPath = cleanPath.startsWith('/') ? cleanPath : '/' + cleanPath;
+    return `${protocol}://${host}${normalizedPath}`;
   }
   return row.image_url || '';
 }
